@@ -41,7 +41,7 @@ button, a {
 }
 
 [data-variant="brand"] {
-  @apply bg-(--brand) text-(--text) inset-shadow-sm inset-shadow-white/40 focus:inset-shadow-white/10;
+  @apply bg-(--brand) text-(--text) inset-shadow-sm inset-shadow-white/40 focus:inset-shadow-white/10 hover:bg-(--brand)/90;
 }
 
 [data-variant="subtle"] {
@@ -50,9 +50,5 @@ button, a {
 
 [data-variant="link"] {
   @apply bg-transparent text-(--text) no-underline hover:underline p-0;
-}
-
-button:hover, a:hover {
-    filter:  brightness(115%);
 }
 </style>

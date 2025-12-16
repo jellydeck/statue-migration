@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 
 // Import site configuration
-// import siteConfig from "/site.config.js";
+import siteConfig from "$lib/site.config.js";
 
 // This error check is to provide an early warning when this module is attempted to be used in the browser
   // const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
@@ -17,97 +17,42 @@ import path from "path";
 
 // Scans all markdown files and folders in the content directory
 const scanContentDirectory = () => {
-  const contentPath = path.resolve("content");
-  console.log({contentPath})
+  const contentFiles = import.meta.glob('/content/**/*.{md,svx}', {
+    eager: true,
+    import: 'default'
+  });
+
   const contentEntries = [];
 
-  if (!fs.existsSync(contentPath)) {
-    console.warn("Content folder not found!");
-    return contentEntries;
-  }
+  Object.entries(contentFiles).forEach(([path, module]) => {
+    // Extract info from path
+    const relativePath = path.replace('/content/', '').replace(/\.(md|svx)$/, '');
+    const parts = relativePath.split('/');
+    const slug = parts[parts.length - 1];
+    const directory = parts.slice(0, -1).join('/') || 'root';
+    const mainDirectory = parts[0] || 'root';
+    const url = `/${relativePath}`;
 
-  // Recursively scan the content folder
-  function scanDir(dirPath, relativePath = "") {
-    const entries = fs.readdirSync(dirPath);
+    // Get metadata from the module
+    const metadata = module.metadata || {};
 
-    for (const entry of entries) {
-      const fullPath = path.join(dirPath, entry);
-      const entryRelativePath = path.join(relativePath, entry);
-      const stats = fs.statSync(fullPath);
-
-      if (stats.isDirectory()) {
-        // If it's a folder, scan its contents
-        scanDir(fullPath, entryRelativePath);
-      } else if (stats.isFile() && (entry.endsWith(".md") || entry.endsWith(".svx"))) {
-        // Add markdown/mdsvex files to the list
-        const slug = entry.replace(/\.(md|svx)$/, "");
-        const url = relativePath ? `/${relativePath}/${slug}`.replace(/\\/g, "/") : `/${slug}`;
-
-        const content = fs.readFileSync(fullPath, "utf-8");
-
-        // Extract frontmatter manually (simple implementation)
-        let metadata = {};
-        let markdownContent = content;
-
-        const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
-        if (frontmatterMatch) {
-          const frontmatterText = frontmatterMatch[1];
-          markdownContent = frontmatterMatch[2];
-
-          // Simple YAML parsing (key: value pairs)
-          frontmatterText.split("\n").forEach((line) => {
-            const match = line.match(/^(\w+):\s*(.+)$/);
-            if (match) {
-              const [, key, value] = match;
-              // Remove quotes if present
-              metadata[key] = value.replace(/^["']|["']$/g, "");
-            }
-          });
-        }
-
-        // Process template variables in metadata
-        const processedMetadata = {};
-        for (const [key, value] of Object.entries(metadata)) {
-          if (typeof value === "string") {
-            processedMetadata[key] = processTemplateVariables(value);
-          } else {
-            processedMetadata[key] = value;
-          }
-        }
-
-        // Add default values
-        const finalMetadata = {
-          title: processedMetadata.title || formatTitle(slug),
-          description: processedMetadata.description || "",
-          date: processedMetadata.date || null,
-          author: processedMetadata.author || null,
-          ...processedMetadata,
-        };
-
-        // Fix directory - use full path
-        const directory = relativePath.replace(/\\/g, "/");
-
-        // Add main directory information to create content tree
-        const mainDirectory = directory.split("/")[0] || "root";
-
-        contentEntries.push({
-          slug,
-          path: entryRelativePath,
-          url,
-          directory,
-          mainDirectory,
-          // Depth of the path
-          depth: directory === "" ? 0 : directory.split("/").length,
-          // Store raw markdown content (mdsvex will process it)
-          rawContent: markdownContent,
-          metadata: finalMetadata,
-        });
+    contentEntries.push({
+      slug,
+      path: relativePath,
+      url,
+      directory,
+      mainDirectory,
+      depth: directory === 'root' ? 0 : parts.length - 1,
+      rawContent: module.rawContent || '',
+      metadata: {
+        title: metadata.title || formatTitle(slug),
+        description: metadata.description || '',
+        date: metadata.date || null,
+        author: metadata.author || null,
+        ...metadata
       }
-    }
-  }
-
-  // Start scanning the content folder
-  scanDir(contentPath);
+    });
+  });
 
   return contentEntries;
 };
@@ -226,7 +171,7 @@ const getAllContent = () => {
 // };
 
 // Function to find subdirectories - returns subdirectories for a specific directory
-const getSubDirectories = (directory) => {
+export const getSubDirectories = (directory) => {
   const allContent = getAllContent();
   const subdirs = new Set();
 
@@ -318,7 +263,7 @@ const processTemplateVariables = (content) => {
 };
 
 // Function to build sidebar navigation tree for a directory
-const getSidebarTree = (directory) => {
+export const getSidebarTree = (directory) => {
   const allContent = getAllContent();
 
   // Filter content for this directory
@@ -467,3 +412,123 @@ export function getContentByDirectory(directory:string) {
 
   return entries;
 }
+
+/**
+ * Returns hierarchical sidebar data for a directory
+ * Groups content by folders, sorts by order
+ */
+ export function getSidebarData(directory) {
+   const contentFiles = import.meta.glob('/content/**/*.{md,svx}', {
+     eager: true
+   });
+
+   const groups = {};
+
+   Object.entries(contentFiles).forEach(([path, module]) => {
+     // Only files from this directory
+     if (!path.startsWith(`/content/${directory}/`)) return;
+
+     // Remove prefix and extension
+     // "/content/docs/group-folder/new-site-checklist.svx"
+     // -> "group-folder/new-site-checklist"
+     const relativePath = path
+       .replace(`/content/${directory}/`, '')
+       .replace(/\.(md|svx)$/, '');
+
+     const parts = relativePath.split('/');
+     const fileName = parts[parts.length - 1];
+     const metadata = module.metadata || {};
+
+     // Determine group
+     let groupTitle;
+     if (parts.length === 1) {
+       // Root level file
+       groupTitle = 'Root';
+     } else {
+       // File inside folder - use FOLDER NAME as title
+       const folderName = parts[0];
+       // Convert "group-folder" -> "Group Folder"
+       groupTitle = folderName
+         .split('-')
+         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+         .join(' ');
+     }
+
+     // Initialize group if needed
+     if (!groups[groupTitle]) {
+       groups[groupTitle] = [];
+     }
+
+     // Add file to group
+     groups[groupTitle].push({
+       title: metadata.title || fileName,
+       slug: relativePath, // Full path for URL
+       url: `/${directory}/${relativePath}`,
+       order: metadata.order || 999
+     });
+   });
+
+   // Sort files within each group by order
+   Object.keys(groups).forEach(groupTitle => {
+     groups[groupTitle].sort((a, b) => a.order - b.order);
+   });
+
+   return groups;
+ }
+
+/**
+ * Returns the URL of the first page in a directory
+ * (first item of first group)
+ */
+ export function getFirstPageUrl(directory) {
+   const sidebar = getSidebarData(directory);
+
+   if (!sidebar || typeof sidebar !== 'object') return null;
+
+   // Convert object to array of groups
+   const groups = Object.entries(sidebar);
+
+   if (groups.length === 0) return null;
+
+   // Find first group that has items
+   for (const [groupName, items] of groups) {
+     if (items && items.length > 0) {
+       return items[0].url;
+     }
+   }
+
+   return null;
+ }
+
+/**
+ * Returns content and metadata for a specific page
+ */
+ export function getPageContent(fullPath) {
+   const contentFiles = import.meta.glob('/content/**/*.{md,svx}', {
+     eager: true
+   });
+
+   // REMOVE TRAILING SLASH
+   const cleanPath = fullPath.endsWith('/')
+     ? fullPath.slice(0, -1)
+     : fullPath;
+
+   // Try both .md and .svx
+   const possiblePaths = [
+     `/content${cleanPath}.md`,
+     `/content${cleanPath}.svx`
+   ];
+
+   for (const path of possiblePaths) {
+     if (contentFiles[path]) {
+       const module = contentFiles[path];
+
+       return {
+         metadata: module.metadata || {},
+         content: module.default,
+       };
+     }
+   }
+
+   return null;
+ }

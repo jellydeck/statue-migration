@@ -88,7 +88,7 @@
   <div class="container mx-auto px-4 pt-16">
     <div class="flex">
       <!-- Left Sidebar - Desktop only -->
-      <div class="hidden lg:block w-64 flex-shrink-0">
+      <div class="hidden lg:block w-64 shrink-0">
         <div class="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto">
           <DocsSidebar
             items={sidebarItems}
