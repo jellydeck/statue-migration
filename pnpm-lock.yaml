@@ -14,12 +14,6 @@ importers:
       '@fontsource/ibm-plex-sans':
         specifier: ^5.2.8
         version: 5.2.8
-      '@fontsource/libre-baskerville':
-        specifier: ^5.2.10
-        version: 5.2.10
-      '@fontsource/source-serif-pro':
-        specifier: ^5.2.5
-        version: 5.2.5
     devDependencies:
       '@eslint/compat':
         specifier: ^1.4.0
@@ -298,12 +292,6 @@ packages:
 
   '@fontsource/ibm-plex-sans@5.2.8':
     resolution: {integrity: sha512-eztSXjDhPhcpxNIiGTgMebdLP9qS4rWkysuE1V7c+DjOR0qiezaiDaTwQE7bTnG5HxAY/8M43XKDvs3cYq6ZYQ==}
-
-  '@fontsource/libre-baskerville@5.2.10':
-    resolution: {integrity: sha512-Y/bGj4cOdWhAxU4+sBPen3MB5Og3t/WvezVL+05CJ7cvhDQUKpQFUuw/hm1IQKRc9u0lWs8VP2MKDOK2uQtloQ==}
-
-  '@fontsource/source-serif-pro@5.2.5':
-    resolution: {integrity: sha512-MTsjMrl2+81dar37wV1taDYzU+o9ArcuBVBkXRNb6JuNCBmrKOIAAmI1wC3cE+Q0eAlgXlfNrvZ7swP3l2M8tQ==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1557,10 +1545,6 @@ snapshots:
   '@fontsource-variable/fraunces@5.2.9': {}
 
   '@fontsource/ibm-plex-sans@5.2.8': {}
-
-  '@fontsource/libre-baskerville@5.2.10': {}
-
-  '@fontsource/source-serif-pro@5.2.5': {}
 
   '@humanfs/core@0.19.1': {}
 
