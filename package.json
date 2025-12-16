@@ -36,5 +36,11 @@
 		"typescript-eslint": "^8.48.1",
 		"vite": "^7.2.6",
 		"vite-plugin-devtools-json": "^1.0.0"
+	},
+	"dependencies": {
+		"@fontsource-variable/fraunces": "^5.2.9",
+		"@fontsource/ibm-plex-sans": "^5.2.8",
+		"@fontsource/libre-baskerville": "^5.2.10",
+		"@fontsource/source-serif-pro": "^5.2.5"
 	}
 }

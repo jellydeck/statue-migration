@@ -10,7 +10,7 @@ export default defineConfig({
         allow: [
           // Default allowed directories
           '.',
-          // Add your content folder
+          // content folder
           'content'
         ]
       }
