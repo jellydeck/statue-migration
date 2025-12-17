@@ -20,7 +20,7 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
         <a href="/" class="flex items-center space-x-2">
-          <div class="text-[var(--color-primary)] w-8 h-8">
+          <div class="text-(--color-primary) w-8 h-8">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect
                 x="3"

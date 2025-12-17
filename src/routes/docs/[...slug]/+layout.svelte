@@ -1,18 +1,15 @@
 <script lang="ts">
 	import DocsContents from '$lib/components/DocsContents.svelte';
 
-
-    const {data, children} = $props();
-    console.log("data", data.sidebar)
+	const { data, children } = $props();
 </script>
 
-
 <div class="article-layout">
-	<aside class="sidebar">
+	<aside class="sidebar bg-pink-300/50">
 		<DocsContents contents={data.sidebar} />
 	</aside>
 
-	<div class="content">
+	<div class="content bg-orange-300/50">
 		{@render children()}
 	</div>
 </div>
@@ -20,45 +17,38 @@
 <style>
 	.article-layout {
 		--sidebar-width: 16rem;
-		--content-width: 640px;
 		--page-padding: 1.5rem;
+		display: flex;
 	}
 
 	.sidebar {
-  display: none;
-}
+		display: none;
+	}
 
-@media (min-width: 832px) {
-  .sidebar {
-    display: block;
-    position: fixed;
-    top: var(--nav-height);
-    left: 0;
-    width: var(--sidebar-width);
-    height: calc(100vh - var(--nav-height));
-    overflow-y: auto;
-  }
+	.content {
+		min-width: 0;
+		margin: var(--page-padding);
+	}
 
-  .content {
-    padding-left: calc(var(--sidebar-width) + var(--page-padding));
-  }
-}
+	@media (min-width: 832px) {
+		.sidebar {
+			display: block;
+			position: fixed;
+			top: var(--nav-height);
+			left: 0;
+			max-width: var(--sidebar-width);
+			height: calc(100vh - var(--nav-height));
+			overflow-y: auto;
+		}
 
-/* Content */
-.content {
-  max-width: var(--content-width);
-  margin-inline: auto;
-  padding: var(--page-padding);
-  min-width: 0;
-}
+		.content {
+			margin-left: var(--sidebar-width);
+		}
+	}
 
-/* Wide screens: keep content centered */
-@media (min-width: 1200px) {
-  .layout {
-    --sidebar-width: max(
-      16rem,
-      calc(0.5 * (100vw - var(--content-width)))
-    );
-  }
-}
+	@media (min-width: 1200px) {
+		.content {
+			margin: 0 auto;
+		}
+	}
 </style>
