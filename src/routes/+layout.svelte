@@ -3,11 +3,16 @@
 
 
 	import favicon from '$lib/assets/favicon.svg';
+	import NavigationBar from '$lib/components/NavigationBar.svelte';
 
-	let { children } = $props();
+	let { data,children } = $props();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
+
+
+
+<NavigationBar navbarItems={data.directories} activePath="/" />
 
 <main>
 	{@render children()}

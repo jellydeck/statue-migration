@@ -17,7 +17,6 @@
 	/>
 </svelte:head>
 
-<NavigationBar navbarItems={data.directories} activePath="/" />
 
 <div
 	class="min-h-screen bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)"

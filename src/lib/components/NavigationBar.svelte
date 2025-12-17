@@ -28,7 +28,7 @@
 </script>
 
 <nav
-	class="bg-[var(--color-background)] {activePath === '/' && !isMenuOpen
+	class="bg-[var(--color-background)] h-[64px] {activePath === '/' && !isMenuOpen
 		? 'md:!bg-transparent'
 		: ''} text-[var(--color-foreground)] fixed w-full top-0 z-50 transition-transform duration-300 will-change-transform {isHidden
 		? '-translate-y-full'
