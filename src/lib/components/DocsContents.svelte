@@ -26,12 +26,8 @@
   - bind:headings: Extracted headings for TOC (reactive output)
 -->
 
-<script lang="ts">
 
-</script>
-
-
-<h1>
-    hiiii from docs content
+<h1 class="text-red-600">
+    helloo hello
 
 </h1>
