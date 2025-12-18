@@ -57,6 +57,10 @@ hr {
 	background: var(--divider);
 }
 
+pre {
+	overflow-x: scroll;
+}
+
 strong {
 	font-weight: 600;
 }
