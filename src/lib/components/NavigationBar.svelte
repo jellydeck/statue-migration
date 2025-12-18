@@ -1,4 +1,5 @@
 <script>
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import Button from '$lib/components/ui/Button.svelte';
 
@@ -12,6 +13,14 @@
 	const toggleMenu = () => (menuOpen = !menuOpen);
 </script>
 
+<svelte:window
+	onkeydown={(e) => {
+		if (menuOpen && e.key === 'Escape') {
+			menuOpen = false;
+		}
+	}}
+/>
+
 <nav
 	class={[
 		'fixed top-0 z-50 h-(--nav-height) w-full bg-(--bg)',
@@ -21,7 +30,7 @@
 	<div class="container mx-auto px-4">
 		<div class="flex h-16 items-center justify-between">
 			<div class="flex items-center">
-				<a href="/" class="flex items-center space-x-2">
+				<a href={resolve('/')} class="flex items-center space-x-2">
 					<div class="h-8 w-8 text-(--color-primary)">
 						<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<rect
@@ -51,7 +60,7 @@
 
 			<!-- Mobile menu button -->
 			<div class="relative md:hidden">
-				<button aria-label="Toggle menu" aria-expanded={menuOpen} on:click={toggleMenu} class="p-2">
+				<button aria-label="Toggle menu" aria-expanded={menuOpen} onclick={toggleMenu} class="p-2">
 					{#if !menuOpen}
 						<!-- Hamburger -->
 						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,11 +98,3 @@
 		</div>
 	</div>
 </nav>
-
-<svelte:window
-	onkeydown={(e) => {
-		if (menuOpen && e.key === 'Escape') {
-			menuOpen = false;
-		}
-	}}
-/>

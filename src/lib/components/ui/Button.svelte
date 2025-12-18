@@ -1,17 +1,11 @@
 <script>
-	import { resolve } from "$app/paths";
+	import { goto } from '$app/navigation';
 
-let {
-  variant = 'default',
-  href = undefined,
-  type = 'button',
-  children,
-  ...rest
-} = $props();
+	let { variant = 'default', href = undefined, type = 'button', children, ...rest } = $props();
 </script>
 
 {#if href}
-	<a data-variant={variant} href={resolve(href)} {...rest}>
+	<a data-variant={variant} href={goto(href)} {...rest}>
 		{@render children()}
 	</a>
 {:else}
@@ -21,34 +15,35 @@ let {
 {/if}
 
 <style>
-@reference "tailwindcss";
+	@reference "tailwindcss";
 
-button, a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.75rem;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s;
-  text-decoration: none;
-  border: none;
-  padding: 12px 16px;
-}
+	button,
+	a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 0.75rem;
+		cursor: pointer;
+		font-weight: 500;
+		transition: all 0.2s;
+		text-decoration: none;
+		border: none;
+		padding: 12px 16px;
+	}
 
-[data-variant="default"] {
-    @apply bg-transparent text-(--text) ring-1 ring-(--text)/10 hover:bg-(--brand)/20 hover:ring-(--brand)/20;
-}
+	[data-variant='default'] {
+		@apply bg-transparent text-(--text) ring-1 ring-(--text)/10 hover:bg-(--brand)/20 hover:ring-(--brand)/20;
+	}
 
-[data-variant="brand"] {
-  @apply bg-(--brand) text-(--text) inset-shadow-sm inset-shadow-white/40 focus:inset-shadow-white/10 hover:bg-(--brand)/90;
-}
+	[data-variant='brand'] {
+		@apply bg-(--brand) text-(--text) inset-shadow-sm inset-shadow-white/40 hover:bg-(--brand)/90 focus:inset-shadow-white/10;
+	}
 
-[data-variant="subtle"] {
-  @apply bg-(--brand) text-(--text);
-}
+	[data-variant='subtle'] {
+		@apply bg-(--brand) text-(--text);
+	}
 
-[data-variant="link"] {
-  @apply bg-transparent text-(--text) no-underline hover:underline p-0;
-}
+	[data-variant='link'] {
+		@apply bg-transparent p-0 text-(--text) no-underline hover:underline;
+	}
 </style>

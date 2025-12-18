@@ -26,9 +26,7 @@
 	<div>
 		<div class="container mx-auto px-4 py-16">
 			<p style="text-align: center;">
-				Statue is an <a href="https://https://github.com/accretional/statue" target="_blank"
-					>open source</a
-				>
+				Statue is an <a href="https://github.com/accretional/statue" target="_blank">open source</a>
 				static site generator brought you to by
 				<a href="https://accretional.com" target="_blank">Accretional</a>, a developer tools
 				company.

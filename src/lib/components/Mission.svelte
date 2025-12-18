@@ -26,8 +26,3 @@
 		</p>
 	</div>
 </div>
-
-<style>
-	a {
-	}
-</style>
