@@ -1,11 +1,16 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 
 	type Item = {
 		title: string;
 		url: string;
 		order: number;
+	};
+
+	type Section = {
+		title: string;
+		isRoot: boolean;
+		items: Item[];
 	};
 
 	const { contents } = $props<{ contents: Section[] }>();
@@ -29,7 +34,7 @@
 			<ul class="list">
 				{#each sortItems(section.items) as item (item.url)}
 					<li>
-						<a href={resolve(item.url)} class="link" class:active={pathname === item.url}>
+						<a href={item.url} class="link" class:active={pathname === item.url}>
 							{item.title}
 						</a>
 					</li>

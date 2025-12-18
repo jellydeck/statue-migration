@@ -24,7 +24,7 @@ interface ContentItem {
 		order: number;
 		[key: string]: any;
 	};
-	content: string;
+	content: any;
 	sections: { title: string; slug: string }[];
 	rawContent: string;
 }
