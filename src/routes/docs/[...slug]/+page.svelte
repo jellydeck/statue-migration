@@ -12,7 +12,6 @@
 				<p class="description">{data.page.metadata.description}</p>
 			{/if}
 		</header>
-
 		<data.page.content />
 
 		<OnThisPage sections={data.page.sections} />

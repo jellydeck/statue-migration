@@ -1,26 +1,58 @@
 // Load all markdown files from /content folder
-const rawFiles = import.meta.glob('/content/**/*.{md,svx}', {
+const rawFiles = import.meta.glob<string>('/content/**/*.{md,svx}', {
 	eager: true,
 	query: '?raw',
 	import: 'default'
 });
 
-const moduleFiles = import.meta.glob('/content/**/*.{md,svx}', {
+const moduleFiles = import.meta.glob<{
+	metadata?: { title?: string; order?: number; [key: string]: any };
+	default: string;
+}>('/content/**/*.{md,svx}', {
 	eager: true
 });
 
+// Define types
+interface ContentItem {
+	slug: string;
+	path: string;
+	url: string;
+	directory: string;
+	mainDirectory: string;
+	metadata: {
+		title: string;
+		order: number;
+		[key: string]: any;
+	};
+	content: any;
+	sections: { title: string; slug: string }[];
+	rawContent: string;
+}
+
+interface SidebarGroup {
+	title: string;
+	url: string;
+	order: number;
+}
+
+interface DirectoryItem {
+	name: string;
+	title: string;
+	url: string;
+}
+
 // Helper: Convert "my-page" to "My Page"
-const formatTitle = (slug) => {
+const formatTitle = (slug: string): string => {
 	return slug
 		.split('-')
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(' ');
 };
 
 // Helper: Extract H2-H6 headings from markdown content
-const extractSections = (markdownContent) => {
+const extractSections = (markdownContent: string): { title: string; slug: string }[] => {
 	const lines = markdownContent.split('\n');
-	const sections = [];
+	const sections: { title: string; slug: string }[] = [];
 
 	for (const line of lines) {
 		const match = line.match(/^##\s+(.*)$/);
@@ -40,7 +72,7 @@ const extractSections = (markdownContent) => {
 };
 
 // Build array of all content with metadata
-export const ALL_CONTENT = Object.entries(moduleFiles).map(([filePath, module]) => {
+export const ALL_CONTENT: ContentItem[] = Object.entries(moduleFiles).map(([filePath, module]) => {
 	// Convert "/content/docs/getting-started.md" to "docs/getting-started"
 	const cleanPath = filePath.replace('/content/', '').replace(/\.(md|svx)$/, '');
 
@@ -70,28 +102,28 @@ export const ALL_CONTENT = Object.entries(moduleFiles).map(([filePath, module]) 
 // ------------------------------------------------------------------
 
 // Get all content pages
-export const getAllContent = () => {
+export const getAllContent = (): ContentItem[] => {
 	return ALL_CONTENT;
 };
 
 // Get all top-level directories (e.g., "docs", "blog", "guides")
-export const getContentDirectories = () => {
+export const getContentDirectories = (): DirectoryItem[] => {
 	const directoryNames = ALL_CONTENT.map((page) => page.mainDirectory).filter(
 		(dir) => dir !== 'root'
 	);
 
-	const uniqueDirectories = [...new Set(directoryNames)];
+	const uniqueDirectories: string[] = [...new Set(directoryNames)];
 
 	return uniqueDirectories.map((name) => ({
 		name,
-		title: formatTitle(name),
+		title: formatTitle(name as string),
 		url: `/${name}`
 	}));
 };
 
 // Get subdirectories within a directory (e.g., "docs/api", "docs/guides")
-export const getSubDirectories = (directory) => {
-	const subdirectories = new Set();
+export const getSubDirectories = (directory: string): DirectoryItem[] => {
+	const subdirectories = new Set<string>();
 
 	for (const page of ALL_CONTENT) {
 		if (page.directory.startsWith(directory + '/')) {
@@ -103,22 +135,22 @@ export const getSubDirectories = (directory) => {
 
 	return Array.from(subdirectories).map((name) => ({
 		name,
-		title: formatTitle(name),
+		title: formatTitle(name as string),
 		url: `/${directory}/${name}`
 	}));
 };
 
 // Get all pages within a directory and its subdirectories
-export const getContentByDirectory = (directory) => {
+export const getContentByDirectory = (directory: string): ContentItem[] => {
 	return ALL_CONTENT.filter((page) => {
 		return page.directory === directory || page.directory.startsWith(directory + '/');
 	});
 };
 
 // Get sidebar navigation data grouped by subfolder
-export const getSidebarData = (directory) => {
+export const getSidebarData = (directory: string): Record<string, SidebarGroup[]> => {
 	const pages = getContentByDirectory(directory);
-	const groups = {};
+	const groups: Record<string, SidebarGroup[]> = {};
 
 	for (const page of pages) {
 		// Remove the base directory to get relative path
@@ -140,14 +172,14 @@ export const getSidebarData = (directory) => {
 
 	// Sort each group by order
 	for (const groupTitle in groups) {
-		groups[groupTitle].sort((a, b) => a.order - b.order);
+		groups[groupTitle].sort((a: { order: number }, b: { order: number }) => a.order - b.order);
 	}
 
 	return groups;
 };
 
 // Get the URL of the first page in a directory
-export const getFirstPageUrl = (directory) => {
+export const getFirstPageUrl = (directory: string): string | null => {
 	const sidebarGroups = getSidebarData(directory);
 	const firstGroup = Object.values(sidebarGroups)[0];
 
@@ -159,7 +191,7 @@ export const getFirstPageUrl = (directory) => {
 };
 
 // Get a specific page by its URL path
-export const getPageContent = (fullPath) => {
+export const getPageContent = (fullPath: string): ContentItem | null => {
 	const cleanPath = fullPath.replace(/\/$/, ''); // Remove trailing slash
 
 	return (
@@ -170,7 +202,7 @@ export const getPageContent = (fullPath) => {
 };
 
 // Get table of contents (sections) for a page
-export const getSectionData = (routeId) => {
+export const getSectionData = (routeId: string): { title: string; slug: string }[] => {
 	const page = getPageContent(routeId);
 	return page ? page.sections : [];
 };

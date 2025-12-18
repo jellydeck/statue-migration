@@ -1,7 +1,8 @@
 import { getSidebarData, getPageContent } from '$lib/cms/content-processor.js';
 import { error } from '@sveltejs/kit';
+import type { LayoutLoad } from './$types';
 
-export function load({ params }) {
+export const load: LayoutLoad = ({ params }) => {
 	const slug = params.slug || '';
 	const fullPath = slug ? `/docs/${slug}` : '/docs';
 	const sidebarRaw = getSidebarData('docs');
@@ -24,4 +25,4 @@ export function load({ params }) {
 		page: pageData,
 		currentPath: fullPath
 	};
-}
+};

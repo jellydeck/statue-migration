@@ -11,7 +11,7 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<NavigationBar navbarItems={data.directories} activePath="/" />
+<NavigationBar navbarItems={data.globalDirectories} activePath="/" />
 
 <main class="pt-(--nav-height)">
 	{@render children()}
