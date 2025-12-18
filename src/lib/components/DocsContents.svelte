@@ -35,36 +35,6 @@
 					</li>
 				{/each}
 			</ul>
-
-			<ul class="list">
-				{#each sortItems(section.items) as item (item.url)}
-					<li>
-						<a href={resolve(item.url)} class="link" class:active={pathname === item.url}>
-							{item.title}
-						</a>
-					</li>
-				{/each}
-			</ul>
-
-			<ul class="list">
-				{#each sortItems(section.items) as item (item.url)}
-					<li>
-						<a href={resolve(item.url)} class="link" class:active={pathname === item.url}>
-							{item.title}
-						</a>
-					</li>
-				{/each}
-			</ul>
-
-			<ul class="list">
-				{#each sortItems(section.items) as item (item.url)}
-					<li>
-						<a href={resolve(item.url)} class="link" class:active={pathname === item.url}>
-							{item.title}
-						</a>
-					</li>
-				{/each}
-			</ul>
 		</div>
 	{/each}
 </nav>

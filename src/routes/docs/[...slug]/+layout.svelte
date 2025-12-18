@@ -40,10 +40,16 @@
 			height: calc(100vh - var(--nav-height));
 			width: var(--sidebar-width);
 			background: var(--bg-2);
-			/*margin: 0 0 0 auto;*/
 			overflow-y: auto;
 			position: sticky;
 			top: var(--nav-height);
+		}
+
+		.content {
+			min-width: 0;
+			max-width: var(--content-width);
+			margin: var(--page-padding * 2);
+			margin-top: calc(var(--page-padding) * 3);
 		}
 	}
 

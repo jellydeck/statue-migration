@@ -56,3 +56,7 @@ h6 {
 hr {
 	background: var(--divider);
 }
+
+strong {
+	font-weight: 600;
+}
