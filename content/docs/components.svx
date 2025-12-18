@@ -10,7 +10,7 @@ Statue includes a library of pre-built Svelte components for building your pages
 
 > **Built a useful component?** Contribute it back to Statue and help the community! It only takes one command. **[Contribute a component →](https://github.com/accretional/statue/blob/main/ADDING_COMPONENTS.md)**
 
-## Importing Components
+# Importing Components
 
 Import components from the `statue-ssg` package:
 
@@ -19,10 +19,9 @@ Import components from the `statue-ssg` package:
   import { Hero, Categories, Footer, NavigationBar } from 'statue-ssg';
 </script>
 ```
+---
 
-## Essential Components
-
-### NavigationBar
+### Navigation Bar
 
 Top navigation with logo, links, and mobile menu.
 
