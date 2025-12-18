@@ -1,6 +1,5 @@
 import { getContentDirectories } from '$lib/cms/content-processor';
 
-/** @type {import('./$types').PageLoad} */
 export function load() {
 	// Get content directories for navigation
 	const directories = getContentDirectories();
