@@ -17,7 +17,7 @@
 <style>
 	.article-layout {
 		--sidebar-width: 18rem;
-		--page-padding: 1.5rem;
+		--page-padding: 2rem;
 		--content-width: calc(680px + var(--page-padding));
 		display: flex;
 	}
@@ -30,14 +30,16 @@
 		min-width: 0;
 		max-width: var(--content-width);
 		margin: var(--page-padding);
+		margin-top: calc(var(--page-padding) * 3);
 	}
 
 	@media (min-width: 832px) {
 		.sidebar {
 			display: block;
 			flex-shrink: 0;
-			width: var(--sidebar-width);
 			height: calc(100vh - var(--nav-height));
+			width: var(--sidebar-width);
+			background: var(--bg-2);
 			overflow-y: auto;
 			position: sticky;
 			top: var(--nav-height);

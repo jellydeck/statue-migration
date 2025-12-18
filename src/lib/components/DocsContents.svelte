@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 
 	type Item = {
@@ -22,57 +23,52 @@
 	}
 </script>
 
-<aside class="sidebar">
-	<nav class="nav">
-		{#each contents as section (section.title)}
-			<div class="section">
-				{#if !section.isRoot}
-					<h3 class="section-title">{section.title}</h3>
-				{/if}
+<nav>
+	{#each contents as section (section.title)}
+		<div class="section">
+			{#if !section.isRoot}
+				<h3 class="section-title">Intro</h3>
+			{:else}
+				<h3 class="section-title">{section.title}</h3>
+			{/if}
 
-				<ul class="list">
-					{#each sortItems(section.items) as item (item.url)}
-						<li>
-							<a href={item.url} class="link" class:active={pathname === item.url}>
-								{item.title}
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</div>
-		{/each}
-	</nav>
-</aside>
+			<ul class="list">
+				{#each sortItems(section.items) as item (item.url)}
+					<li>
+						<a href={resolve(item.url)} class="link" class:active={pathname === item.url}>
+							{item.title}
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	{/each}
+</nav>
 
 <style>
-	.sidebar {
-		background: var(--bg-2);
+	nav {
 		color: var(--text);
-		border-right: 1px solid var(--bg);
 		height: 100vh;
+		padding: var(--page-padding);
+		margin: 0 0 0 auto;
+		padding-top: calc(var(--page-padding) * 3);
 		position: sticky;
 		top: 0;
-	}
-
-	.nav {
-		padding: 1rem;
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: 2rem;
 	}
 
 	.section {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: 0.125rem;
 	}
 
 	.section-title {
-		font-family: var(--font-text);
-		font-size: 1rem;
-		letter-spacing: 0.05em;
-		color: var(--text-2);
-		margin: 0.5rem 0;
+		font-weight: 300;
+		letter-spacing: -0.025em;
+		color: var(--text);
 	}
 
 	.list {
@@ -81,13 +77,13 @@
 		margin: 0;
 		display: flex;
 		flex-direction: column;
+		gap: 2px;
 	}
 
 	.link {
 		display: block;
-		padding: 0.375rem 0.5rem;
 		border-radius: 6px;
-		text-decoration: none;
+		text-decoration: underline;
 		color: var(--text);
 		transition:
 			background 120ms ease,
@@ -95,13 +91,17 @@
 	}
 
 	.link:hover {
-		background: var(--bg);
 		color: var(--text);
+		text-underline-offset: 0.131h;
 	}
 
 	.link.active {
 		background: var(--bg);
 		color: var(--text);
 		font-weight: 500;
+	}
+
+	nav:has(.link:hover) .link:not(:hover) {
+		color: var(--text-2);
 	}
 </style>
