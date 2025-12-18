@@ -16,7 +16,7 @@
 
 <style>
 	.article-layout {
-		--sidebar-width: 16rem;
+		--sidebar-width: 18rem;
 		--page-padding: 1.5rem;
 		--content-width: calc(var(--page-padding) + 640px);
 		display: flex;
@@ -36,7 +36,7 @@
 		.sidebar {
 			display: block;
 			flex-shrink: 0;
-			width: 16rem;
+			width: var(--sidebar-width);
 			height: calc(100vh - var(--nav-height));
 			overflow-y: auto;
 			position: sticky;
@@ -45,8 +45,5 @@
 	}
 
 	@media (min-width: 1200px) {
-		.content {
-			margin: 0 auto;
-		}
 	}
 </style>

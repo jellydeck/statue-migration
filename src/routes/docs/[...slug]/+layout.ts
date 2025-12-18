@@ -1,7 +1,7 @@
-import { getSidebarData, getPageContent, getSectionData } from '$lib/cms/content-processor.js';
+import { getSidebarData, getPageContent } from '$lib/cms/content-processor.js';
 import { error } from '@sveltejs/kit';
 
-export function load({ params, route }) {
+export function load({ params }) {
 	const slug = params.slug || '';
 	const fullPath = slug ? `/docs/${slug}` : '/docs';
 	const sidebarRaw = getSidebarData('docs');
