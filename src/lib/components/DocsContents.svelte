@@ -1,5 +1,7 @@
 <script lang="ts">
 	const { contents } = $props();
+
+	console.log({ contents });
 </script>
 
 <aside>

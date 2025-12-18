@@ -18,6 +18,7 @@
 	.article-layout {
 		--sidebar-width: 16rem;
 		--page-padding: 1.5rem;
+		--content-width: calc(var(--page-padding) + 640px);
 		display: flex;
 	}
 
@@ -27,6 +28,7 @@
 
 	.content {
 		min-width: 0;
+		max-width: var(--content-width);
 		margin: var(--page-padding);
 	}
 
